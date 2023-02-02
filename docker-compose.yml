@@ -1,7 +1,7 @@
 version: "3"
 services:
   server:
-    build: ./02-backend/spring-boot-ecommerce/
+    image: henryshao/ecommerce:server
     ports:
       - "8080:8080"
     environment:
@@ -12,7 +12,7 @@ services:
       - mysqldb
 
   mysqldb:
-    image: mysql:8.0
+    image: henryshao/ecommerce:database
     networks:
       - ecommerce-network
     environment:
@@ -26,17 +26,13 @@ services:
       - ./02-backend/spring-boot-ecommerce/init:/docker-entrypoint-initdb.d
 
   dashboard:
-    build: ./03-frontend/angular-ecommerce/
+    image: henryshao/ecommerce:frontend
     networks:
       - ecommerce-network
     depends_on:
       - server
     ports:
       - "4200:4200"
-      - "49153:49153"
-    volumes:
-      - "/03-frontend/angular-ecommerce/app/node_modules"
-      - "./03-frontend/angular-ecommerce:/app"
 
 networks:
   ecommerce-network:
